@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+
+# 系统与 IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# pdf2zh-next 运行产物
+pdf2zh_files/
+final_output*/
+output/
+
+# 测试与本地试验
+test_output*/
+test_translate.log
+*.log
+
+# 图片翻译：样例图、译图输出、Chrome 配置
+pics/
+.chrome-google-translate/
+
+# Gradio 预览缓存
+.gradio_preview/
+
+# 大文件 / 压缩包（翻译输出）
+*.pdf
+*.zip
+*.csv
+
+# 但保留项目说明类小文件（若以后需要可单独 ! 某路径）
+# 当前仓库只提交源码与启动脚本，不提交 PDF 与数据

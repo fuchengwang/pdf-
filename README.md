@@ -45,12 +45,31 @@ Web UI 中需选择可用的翻译后端，例如：
 | `PDF2ZH_SERVER_PORT` | 7860 | Web 端口 |
 | `PDF2ZH_UI_LANG` | zh | 界面语言 |
 
+## 图片翻译 Web（端口 10002）
+
+使用 **本机 Google Chrome** 打开 Google 网页「图片翻译」，登录态保存在项目目录 `.chrome-google-translate/`。
+
+```bash
+chmod +x start-image-translate-web.sh
+./start-image-translate-web.sh
+```
+
+浏览器打开 **http://localhost:10002/** → 先点 **「打开浏览器登录」** → 上传图片并填写保存目录、文件名 → **开始翻译**。
+
+| 变量 | 默认值 | 含义 |
+|------|--------|------|
+| `IMAGE_TRANSLATE_PORT` | 10002 | Web 端口 |
+
 ## 目录结构
 
 ```
 .
-├── .venv/              # Python 3.12 虚拟环境（已安装 pdf2zh-next）
-├── start-webui.sh      # 启动 Web UI
+├── .venv/                      # Python 3.12 虚拟环境
+├── start-webui.sh              # PDF 翻译 Web（7860）
+├── start-pdf-split-web.sh      # PDF 拆页 / 双语（10001）
+├── start-image-translate-web.sh  # 图片翻译（10002）
+├── google_image_translate.py   # Google 网页图译后端
+├── image_translate_web.py
 └── README.md
 ```
 
