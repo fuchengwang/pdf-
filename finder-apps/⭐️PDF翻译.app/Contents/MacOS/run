@@ -1,0 +1,5 @@
+#!/bin/bash
+LOG="$HOME/Library/Logs/pdf-finder-tools.log"
+echo "======== $(date '+%Y-%m-%d %H:%M:%S') service translate app-start ========" >> "$LOG"
+ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+exec bash "$ROOT/finder_service.sh" translate

@@ -29,6 +29,11 @@ from pathlib import Path
 import fitz
 
 
+def normalize_pages_spec(text: str) -> str:
+    """把空格、中文逗号等统一成 1,3,5-8 格式。"""
+    return re.sub(r"[\s，、;；]+", ",", text.strip())
+
+
 def parse_page_list(spec: str, total: int) -> list[int]:
     """解析页码：1,3,5-8 -> [1,3,5,6,7,8]（1 起算）。"""
     pages: list[int] = []
@@ -135,6 +140,34 @@ def remove_pages_from_source(src: Path, pages: list[int]) -> int:
         return remaining
     finally:
         doc.close()
+
+
+def merge_bilingual_side_by_side(left: Path, right: Path, out: Path) -> int:
+    """左右并排合并：每对页合成一页（左原文、右译文）。返回总页数。"""
+    doc_l = fitz.open(left)
+    doc_r = fitz.open(right)
+    if doc_l.page_count != doc_r.page_count:
+        n_l, n_r = doc_l.page_count, doc_r.page_count
+        doc_l.close()
+        doc_r.close()
+        raise ValueError(f"页数不一致：左 {n_l} 页，右 {n_r} 页，请使用相同页数的 PDF。")
+
+    merged = fitz.open()
+    for i in range(doc_l.page_count):
+        r1 = doc_l[i].rect
+        r2 = doc_r[i].rect
+        h = max(r1.height, r2.height)
+        w = r1.width + r2.width
+        page = merged.new_page(width=w, height=h)
+        page.show_pdf_page(fitz.Rect(0, 0, r1.width, h), doc_l, i)
+        page.show_pdf_page(fitz.Rect(r1.width, 0, w, h), doc_r, i)
+
+    merged.save(out, garbage=4, deflate=True)
+    pages = merged.page_count
+    merged.close()
+    doc_l.close()
+    doc_r.close()
+    return pages
 
 
 def merge_pdfs_append(first: Path, second: Path, out: Path) -> int:
